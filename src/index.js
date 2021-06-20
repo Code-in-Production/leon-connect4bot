@@ -14,7 +14,11 @@ const { getTurnMessage } = require('./board/message');
 const { getBoardColumnButtons } = require('./board/components');
 const { isColFull } = require('./utils');
 const { getInventoryMessage } = require('./player');
-const { helpMessage, inventoryHelpMessage } = require('./help');
+const {
+  helpMessage,
+  inventoryHelpMessage,
+  boardHelpMessage,
+} = require('./help');
 
 client.on('ready', () => {
   console.info('Bot is ready.');
@@ -88,6 +92,8 @@ client.on('message', (msg) => {
       msg.channel.send(helpMessage);
     } else if (subcommand === 'inventory') {
       msg.channel.send(inventoryHelpMessage);
+    } else if (subcommand === 'board') {
+      msg.channel.send(boardHelpMessage);
     } else {
       msg.channel.send(
         `Unrecognized command: \`!${command}\`. Please use \`!help\` to get a list of commands.`

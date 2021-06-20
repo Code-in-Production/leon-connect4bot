@@ -15,8 +15,8 @@ const helpMessage = outdent`
 	Anvil - A piece that clears an entire column and only leaves the anvil piece remaining (think of it as
 	an anvil falling and crushing all the other pieces). The anvil piece then becomes a regular piece once
 	it is in the board.
-	Spike - A piece that destroys the next piece that is placed in the same column as the spike, regardless
-	of color. After it destroys a piece, it then becomes a regular piece.
+	Spike - A piece that destroys the next piece (special or non-special) that is placed in the same column as the spike, 
+	regardless of color. After it destroys a piece, it then becomes a regular piece.
 	Bomb - A piece that when dropped in a column, destroys the bottom piece in the column, which causes 
 	all the other pieces to fall down a row. Once it is in the board, it becomes a regular piece.
 
@@ -42,7 +42,16 @@ const inventoryHelpMessage = outdent`
 	\`\`\`
 `;
 
+const boardHelpMessage = outdent`
+	\`\`\`
+	The board consists of blank squares, red pieces, and yellow pieces. The black squares represent
+	the bottom of the board, and if a spike piece is active on a column, the black square for
+	that column turns into a cactus until the spike is removed when a piece hits it.
+	\`\`\`
+`;
+
 module.exports = {
   helpMessage,
+  boardHelpMessage,
   inventoryHelpMessage,
 };
