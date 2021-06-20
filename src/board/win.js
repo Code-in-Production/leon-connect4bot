@@ -1,5 +1,7 @@
+const capitalize = require('lodash.capitalize');
 const { resetGame } = require('../game/reset');
 const gameState = require('../state');
+const { isBoardFull } = require('../utils');
 const { getBoardMessage } = require('./message');
 
 function isRed({ col, row }) {
@@ -22,6 +24,8 @@ function announceWinner({ channel, winningSquares }) {
 }
 
 function checkWin(channel) {
+  // Check if there is a win
+
   let streak = 0;
   let streakColor = '';
 
