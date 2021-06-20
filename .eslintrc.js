@@ -13,5 +13,6 @@ module.exports = {
     'consistent-return': 'off',
     'no-console': 'off',
     'no-else-return': 'off',
+    'no-restricted-syntax': 'off',
   },
 };
