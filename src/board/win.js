@@ -1,6 +1,7 @@
 const { resetGame } = require('../game/reset');
 const gameState = require('../state');
 const { getBoardMessage } = require('./message');
+const capitalize = require('lodash.capitalize');
 
 function isRed({ col, row }) {
   return gameState.board[row][col].color === 'red';
@@ -14,9 +15,9 @@ function announceWinner({ channel, winningSquares }) {
   channel.send(
     `${getBoardMessage({
       winningSquares,
-    })}\n\nWe have a winner; Congratulations to ${
+    })}\n${capitalize(
       gameState.curColor
-    } for completing the first Connect 4!`
+    )} has made a connect-4 and won the game! To start a new game, type in \`!new\`.`
   );
   resetGame();
 }
