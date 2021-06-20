@@ -13,7 +13,7 @@ const gameState = {
   player1Id: '',
   player2Id: '',
   playerWaitingForReady: 0,
-  isBombActive: false,
+  isBombDetonationActive: false,
 };
 
 module.exports = gameState;

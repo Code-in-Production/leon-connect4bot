@@ -11,6 +11,7 @@ const { resetGame } = require('./game/reset');
 const { Piece, playPiece, detonateBomb } = require('./piece');
 const { sendBoardMessageAndActions } = require('./board/message');
 const { getTurnMessage } = require('./board/message');
+const { getBoardColumnButtons } = require('./board/components');
 
 client.on('ready', () => {
   console.log('Bot is ready.');
@@ -110,12 +111,36 @@ client.on('clickButton', async (button) => {
   // alter the game state accordingly
   if (type === 'powerup') {
     gameState.powerupsActivated[powerup] = true;
-    button.channel.send(`Powerup ${powerup} activated.`);
+    if (powerup === 'anvil') {
+      button.channel.send(
+        `Which column would you like to drop the anvil piece on?`,
+        // Anvil can always be dropped
+        {
+          components: getBoardColumnButtons({
+            isColDisabled: () => false,
+          }),
+        }
+      );
+    } else if (powerup === 'spike') {
+      button.channel.send(
+        `Which column would you like to drop the spike piece on?`,
+        {
+          components: getBoardColumnButtons(),
+        }
+      );
+    } else if (powerup === 'bomb') {
+      button.channel.send(
+        `Which column would you like to drop the bomb piece on? (You'll be asked which column you would like to detonate after.)`,
+        {
+          components: getBoardColumnButtons(),
+        }
+      );
+    }
   }
 
   // If the button is a column play button, then play the piece
   else if (type === 'column') {
-    if (gameState.isBombActive) {
+    if (gameState.isBombDetonationActive) {
       detonateBomb({
         channel: button.channel,
         col,

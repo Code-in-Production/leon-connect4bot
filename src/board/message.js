@@ -46,17 +46,20 @@ function getBoardMessage(params = {}) {
 }
 
 function getTurnMessage() {
-  let msg = outdent`===================
-  **${capitalize(gameState.curColor)}'s Turn:**\n`;
+  let msg = outdent`
+  ===================
+  **${capitalize(gameState.curColor)}'s Turn:**`;
 
-  msg += getBoardMessage();
+  msg += `\n${getBoardMessage()}`;
 
   return msg;
 }
 
 function sendBoardMessageAndActions(channel) {
   channel.send(
-    `${getTurnMessage()}To play a piece, press the corresponding column number:`,
+    outdent`
+    ${getTurnMessage()}
+    To play a piece, press the corresponding column number:`,
     { components: getBoardActionComponents() }
   );
 }

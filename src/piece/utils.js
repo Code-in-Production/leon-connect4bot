@@ -53,7 +53,7 @@ function playPiece({ col, piece, channel }) {
           components: [getBoardColumnButtons((column) => isColEmpty(column))],
         }
       );
-      // TODO: Query user for bomb
+      gameState.isBombDetonationActive = true;
     }
   } else if (gameState.powerupsActivated.spike) {
     dropPiece({ color, col });
@@ -63,6 +63,7 @@ function playPiece({ col, piece, channel }) {
     dropPiece({ color, col });
     if (!checkWin(channel)) endTurn(channel);
   }
+
   resetPowerups();
 }
 
@@ -82,7 +83,7 @@ function detonateBomb({ col, channel }) {
     endTurn(channel);
   }
 
-  gameState.isBombActive = false;
+  gameState.isBombDetonationActive = false;
 }
 
 module.exports = { dropPiece, playPiece, detonateBomb };
