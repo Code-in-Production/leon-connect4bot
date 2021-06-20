@@ -1,4 +1,5 @@
 const capitalize = require('lodash.capitalize');
+const delay = require('delay');
 const { isColFull, isColEmpty } = require('../utils');
 const Piece = require('./piece');
 const gameState = require('../state');
@@ -26,7 +27,7 @@ function resetPowerups() {
   gameState.powerupsActivated.bomb = false;
 }
 
-function playPiece({ col, channel }) {
+async function playPiece({ col, channel }) {
   const color = gameState.curColor;
 
   // Removing piece from inventory
@@ -46,6 +47,7 @@ function playPiece({ col, channel }) {
     channel.send(
       `${capitalize(gameState.curColor)}'s piece was destroyed by the spike.`
     );
+    await delay(1000);
 
     resetPowerups();
     endTurn(channel);
@@ -64,31 +66,47 @@ function playPiece({ col, channel }) {
     dropPiece({ color, col });
     if (!checkWin(channel)) {
       channel.send(
-        'Please select a column to detonate (which will remove the bottom piece of the column and cause the other pieces in the column to fall down a row).',
+        `${capitalize(gameState.curColor)} dropped a bomb piece on column ${
+          col + 1
+        }.`
+      );
+      await delay(1000);
+      channel.send(
+        `Please select a column to detonate (which will remove the bottom piece of the column and cause the other pieces in the column to fall down a row).`,
         {
-          components: [
-            getBoardColumnButtons({
-              // Can't detonate an empty column
-              isColDisabled: (column) => isColEmpty(column),
-            }),
-          ],
+          components: getBoardColumnButtons({
+            // Can't detonate an empty column
+            isColDisabled: (column) => isColEmpty(column),
+          }),
         }
       );
       gameState.isBombDetonationActive = true;
     }
   } else if (gameState.powerupsActivated.spike) {
     dropPiece({ color, col });
+    channel.send(
+      `${capitalize(gameState.curColor)} dropped a spike piece on column ${
+        col + 1
+      }.`
+    );
     gameState.spikes[col] = true;
+    await delay(1000);
     if (!checkWin(channel)) endTurn(channel);
   } else {
     dropPiece({ color, col });
+    channel.send(
+      `${capitalize(gameState.curColor)} dropped a regular piece on column ${
+        col + 1
+      }.`
+    );
+    await delay(1000);
     if (!checkWin(channel)) endTurn(channel);
   }
 
   resetPowerups();
 }
 
-function detonateBomb({ col, channel }) {
+async function detonateBomb({ col, channel }) {
   for (let row = 4; row > 0; row -= 1) {
     gameState.board[row][col] = gameState.board[row - 1][col];
   }
@@ -99,6 +117,7 @@ function detonateBomb({ col, channel }) {
   channel.send(
     `${capitalize(gameState.curColor)} has detonated a bomb on column ${col}.`
   );
+  await delay(1000);
 
   if (!checkWin(channel)) {
     endTurn(channel);

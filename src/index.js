@@ -146,12 +146,12 @@ client.on('clickButton', async (button) => {
   // If the button is a column play button, then play the piece
   else if (type === 'column') {
     if (gameState.isBombDetonationActive) {
-      detonateBomb({
+      await detonateBomb({
         channel: button.channel,
         col,
       });
     } else {
-      playPiece({ channel: button.channel, col });
+      await playPiece({ channel: button.channel, col });
     }
   }
 
