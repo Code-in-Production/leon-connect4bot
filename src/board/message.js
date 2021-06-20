@@ -63,7 +63,9 @@ function getTurnMessage() {
   if (gameState.lastMessage) msg += `${gameState.lastMessage}\n`;
 
   msg += outdent`
-  **${capitalize(gameState.curColor)}'s Turn:**`;
+  ${gameState.curColor === 'red' ? redEmoji : yellowEmoji} **${capitalize(
+    gameState.curColor
+  )}'s Turn:**`;
 
   msg += `\n${getBoardMessage()}`;
 

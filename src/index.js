@@ -46,6 +46,7 @@ client.on('message', (msg) => {
       msg.channel.send('Yellow player, please type in `!ready`');
     } else if (gameState.playerWaitingForReady === 'yellow') {
       gameState.playerId.yellow = msg.author.id;
+      gameState.gameStarted = true;
       msg.channel.send('Starting new game...');
       sendBoardMessageAndActions(msg.channel);
     } else {
