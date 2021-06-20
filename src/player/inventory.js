@@ -11,7 +11,7 @@ const {
 
 function getInventoryMessage({ color }) {
   return outdent`
-		**${capitalize(color)}'s Inventory:**__
+		__**${capitalize(color)}'s Inventory:**__
 		${color === 'red' ? redEmoji : yellowEmoji} **Regular Pieces**: ${
     gameState.inventories[color].regular
   }

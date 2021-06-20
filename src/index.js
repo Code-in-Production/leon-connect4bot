@@ -67,8 +67,15 @@ client.on('message', (msg) => {
   } else if (command === 'inventory') {
     if (!checkGameStarted(msg.channel)) return;
 
+    // If the player is both red and yellow, display the current inventory
+    if (
+      msg.author.id === gameState.playerId.red &&
+      msg.author.id === gameState.playerId.yellow
+    ) {
+      msg.channel.send(getInventoryMessage({ color: gameState.curColor }));
+    }
     // Check if the player is the red player or the yellow player
-    if (msg.author.id === gameState.playerId.red) {
+    else if (msg.author.id === gameState.playerId.red) {
       msg.channel.send(getInventoryMessage({ color: 'red' }));
     } else if (msg.author.id === gameState.playerId.yellow) {
       msg.channel.send(getInventoryMessage({ color: 'red' }));
