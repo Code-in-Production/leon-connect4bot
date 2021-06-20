@@ -54,9 +54,8 @@ function isSpikePlayable() {
   return gameState.inventories[gameState.curColor].spike > 0 && !isBoardFull();
 }
 
-// Spike is only playable when at least one col is not full
 function isBombPlayable() {
-  return gameState.inventories[gameState.curColor].bomb > 0 && !isBoardFull();
+  return gameState.inventories[gameState.curColor].bomb > 0;
 }
 
 function getPowerupActionButtons() {

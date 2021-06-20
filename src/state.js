@@ -15,7 +15,6 @@ const gameState = {
     yellow: '',
   },
   playerWaitingForReady: '',
-  isBombDetonationActive: false,
   inventories: {
     red: {
       regular: 16,

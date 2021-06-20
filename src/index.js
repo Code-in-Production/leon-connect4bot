@@ -9,7 +9,7 @@ const { outdent } = require('outdent');
 const { parseButtonId } = require('./button');
 const gameState = require('./state');
 const { resetGame } = require('./game/reset');
-const { playPiece, detonateBomb } = require('./piece');
+const { playPiece } = require('./piece');
 const { sendBoardMessageAndActions } = require('./board/message');
 const { getTurnMessage } = require('./board/message');
 const { getBoardColumnButtons } = require('./board/components');
@@ -142,7 +142,7 @@ client.on('clickButton', async (button) => {
       );
     } else if (powerup === 'bomb') {
       button.channel.send(
-        `Which column would you like to drop the bomb piece on? (You'll be asked which column you would like to detonate after.)`,
+        `Which column would you like to drop the bomb piece on?`,
         {
           components: getBoardColumnButtons({
             isColDisabled: (column) => isColFull(column),
@@ -154,14 +154,7 @@ client.on('clickButton', async (button) => {
 
   // If the button is a column play button, then play the piece
   else if (type === 'column') {
-    if (gameState.isBombDetonationActive) {
-      await detonateBomb({
-        channel: button.channel,
-        col,
-      });
-    } else {
-      await playPiece({ channel: button.channel, col });
-    }
+    await playPiece({ channel: button.channel, col });
   }
 
   button.defer();

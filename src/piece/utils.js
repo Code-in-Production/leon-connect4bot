@@ -61,21 +61,22 @@ async function playPiece({ col, channel }) {
     gameState.board[4][col] = Piece({ color });
     endTurn(channel);
   } else if (gameState.powerupsActivated.bomb) {
+    // Moving all pieces one spot down
+    for (let row = 4; row > 0; row -= 1) {
+      gameState.board[row][col] = gameState.board[row - 1][col];
+    }
+
+    // Make the top piece empty
+    gameState.board[0][col] = Piece();
+
     dropPiece({ color, col });
+
+    gameState.lastMessage = `${capitalize(
+      gameState.curColor
+    )} has dropped a bomb piece on column ${col + 1}.`;
+
     if (!checkWin(channel)) {
-      gameState.lastMessage = `${capitalize(
-        gameState.curColor
-      )} dropped a bomb piece on column ${col + 1}.`;
-      channel.send(
-        `Please select a column to detonate (which will remove the bottom piece of the column and cause the other pieces in the column to fall down a row).`,
-        {
-          components: getBoardColumnButtons({
-            // Can't detonate an empty column
-            isColDisabled: (column) => isColEmpty(column),
-          }),
-        }
-      );
-      gameState.isBombDetonationActive = true;
+      endTurn(channel);
     }
   } else if (gameState.powerupsActivated.spike) {
     dropPiece({ color, col });
@@ -97,23 +98,4 @@ async function playPiece({ col, channel }) {
   resetPowerups();
 }
 
-async function detonateBomb({ col, channel }) {
-  for (let row = 4; row > 0; row -= 1) {
-    gameState.board[row][col] = gameState.board[row - 1][col];
-  }
-
-  // Make the top piece empty
-  gameState.board[0][col] = Piece();
-
-  gameState.lastMessage = `${capitalize(
-    gameState.curColor
-  )} has detonated a bomb on column ${col + 1}.`;
-
-  if (!checkWin(channel)) {
-    endTurn(channel);
-  }
-
-  gameState.isBombDetonationActive = false;
-}
-
-module.exports = { dropPiece, playPiece, detonateBomb };
+module.exports = { dropPiece, playPiece };
