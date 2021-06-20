@@ -49,7 +49,7 @@ client.on('message', (msg) => {
       gameState.playerId.red = msg.author.id;
       gameState.playerWaitingForReady = 'yellow';
       msg.channel.send(
-        `${yellowEmoji}Yellow player, please type in \`!ready\``
+        `${yellowEmoji} Yellow player, please type in \`!ready\``
       );
     } else if (gameState.playerWaitingForReady === 'yellow') {
       gameState.playerId.yellow = msg.author.id;
@@ -65,7 +65,7 @@ client.on('message', (msg) => {
     resetGame();
     gameState.playerWaitingForReady = 'red';
     msg.channel.send(
-      `Starting a new game...\n${redEmoji}Red player, please type in \`!ready\``
+      `Starting a new game...\n${redEmoji} Red player, please type in \`!ready\``
     );
   } else if (command === 'board') {
     if (!checkGameStarted(msg.channel)) return;

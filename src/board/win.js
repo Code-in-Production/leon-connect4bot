@@ -13,7 +13,7 @@ function isYellow({ col, row }) {
 
 function announceWinner({ channel, winningSquares }) {
   channel.send(
-    `${getBoardMessage({
+    `================\n${getBoardMessage({
       winningSquares,
     })}\n${capitalize(
       gameState.curColor

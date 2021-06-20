@@ -60,7 +60,7 @@ function getBoardMessage(params = {}) {
 }
 
 function getTurnMessage() {
-  let msg = '===================\n';
+  let msg = '================\n';
   if (gameState.lastMessage) msg += `${gameState.lastMessage}\n`;
 
   msg += outdent`
