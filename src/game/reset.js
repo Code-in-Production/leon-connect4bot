@@ -22,7 +22,7 @@ function resetGame() {
 
   gameState.board = newBoard;
   gameState.gameId = nanoid();
-  gameState.gameStarted = true;
+  gameState.gameStarted = false;
   gameState.spikes = [false, false, false, false, false, false, false];
   gameState.curColor = 'red';
   gameState.turn = 0;

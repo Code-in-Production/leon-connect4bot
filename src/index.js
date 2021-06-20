@@ -5,6 +5,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 require('discord-buttons')(client);
 
+const { outdent } = require('outdent');
 const { parseButtonId } = require('./button');
 const gameState = require('./state');
 const { resetGame } = require('./game/reset');
@@ -13,20 +14,12 @@ const { sendBoardMessageAndActions } = require('./board/message');
 const { getTurnMessage } = require('./board/message');
 const { getBoardColumnButtons } = require('./board/components');
 const { isColFull } = require('./utils');
-const { outdent } = require('outdent');
 const { getInventoryMessage } = require('./player');
 
 client.on('ready', () => {
-  console.log('Bot is ready.');
+  console.info('Bot is ready.');
+  resetGame();
 });
-
-function debugBoard() {
-  for (let row = 0; row < 5; row += 1) {
-    for (let col = 0; col < 7; col += 1) {
-      console.log(gameState.board[row][col]);
-    }
-  }
-}
 
 function checkGameStarted(channel) {
   if (!gameState.gameStarted) {
@@ -43,28 +36,28 @@ client.on('message', (msg) => {
   if (command === 'ready') {
     if (gameState.gameStarted) {
       return msg.channel.send(
-        'A game is already in progress. To reset the game, use !reset.'
+        'A game is already in progress. To start a new game, use `!new`.'
       );
     }
 
     if (gameState.playerWaitingForReady === 'red') {
       gameState.playerId.red = msg.author.id;
       gameState.playerWaitingForReady = 'yellow';
-      msg.channel.send('Yellow player, please type in !ready');
+      msg.channel.send('Yellow player, please type in `!ready`');
     } else if (gameState.playerWaitingForReady === 'yellow') {
       gameState.playerId.yellow = msg.author.id;
       msg.channel.send('Starting new game...');
-      resetGame();
       sendBoardMessageAndActions(msg.channel);
     } else {
       msg.channel.send(
-        'A game has not been started. To start a new game, type !new'
+        'A game has not been started. To start a new game, type `!new`'
       );
     }
   } else if (command === 'new') {
+    resetGame();
     gameState.playerWaitingForReady = 'red';
     msg.channel.send(
-      'Starting a new game...\nRed player, please type in !ready'
+      'Starting a new game...\nRed player, please type in `!ready`'
     );
   } else if (command === 'board') {
     if (!checkGameStarted(msg.channel)) return;
@@ -83,13 +76,22 @@ client.on('message', (msg) => {
     }
   } else if (command === 'help') {
     const helpMessage = outdent`
-      This is the help message.
+      \`\`\`
+      Hi, I'm the friendly Connect 4 Bot!
+
+      Commands:
+      !help - Displays this message.
+      !new - Starts a new Connect-4 game.
+      !ready - Registers yourself as a player in the pending Connect-4 game.
+      !board - Displays the current board state.
+      !inventory - Displays your inventory.
+      \`\`\`
     `;
 
     msg.channel.send(helpMessage);
   } else {
     msg.channel.send(
-      `Unrecognized command: ${command}. Please use !help to get a list of commands.`
+      `Unrecognized command: \`!${command}\`. Please use \`!help\` to get a list of commands.`
     );
   }
 });
@@ -108,13 +110,11 @@ client.on('clickButton', async (button) => {
     buttonGameId !== gameState.gameId ||
     buttonTurnNumber !== gameState.turnNumber
   ) {
-    return button.reply.send(
-      'This button is for a previous turn; nothing happened.'
-    );
+    return button.defer();
   }
 
   if (button.clicker.member.id !== gameState.playerId[gameState.curColor]) {
-    return button.reply.send('It is not your turn!');
+    return button.defer();
   }
 
   // If the button is a powerup button (i.e. to activate a powerup), then
