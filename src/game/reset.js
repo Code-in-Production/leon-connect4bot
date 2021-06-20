@@ -30,7 +30,6 @@ function resetGame() {
   gameState.playerId.red = '';
   gameState.playerId.yellow = '';
   gameState.playerWaitingForReady = '';
-  gameState.isBombDetonationActive = false;
   gameState.powerupsActivated.bomb = false;
   gameState.powerupsActivated.anvil = false;
   gameState.powerupsActivated.spike = false;

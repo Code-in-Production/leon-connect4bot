@@ -35,9 +35,7 @@ function endTurn(channel) {
 
   function cantMove() {
     return (
-      isBoardFull() &&
-      gameState.inventories[gameState.curColor].anvil <= 0 &&
-      gameState.inventories[gameState.curColor].bomb <= 0
+      isBoardFull() && gameState.inventories[gameState.curColor].anvil <= 0
     );
   }
 

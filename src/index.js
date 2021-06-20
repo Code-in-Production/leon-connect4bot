@@ -5,7 +5,6 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 require('discord-buttons')(client);
 
-const { outdent } = require('outdent');
 const { parseButtonId } = require('./button');
 const gameState = require('./state');
 const { resetGame } = require('./game/reset');
@@ -75,18 +74,6 @@ client.on('message', (msg) => {
       msg.channel.send('You are not a player in the current game!');
     }
   } else if (command === 'help') {
-    const helpMessage = outdent`
-      \`\`\`
-      Hi, I'm the friendly Connect 4 Bot!
-
-      Commands:
-      !help - Displays this message.
-      !new - Starts a new Connect-4 game.
-      !ready - Registers yourself as a player in the pending Connect-4 game.
-      !board - Displays the current board state.
-      !inventory - Displays your inventory.
-      \`\`\`
-    `;
 
     msg.channel.send(helpMessage);
   } else {
