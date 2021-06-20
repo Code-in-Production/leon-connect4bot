@@ -4,4 +4,8 @@ function isColFull(col) {
   return gameState.board[0][col].color !== null;
 }
 
-module.exports = { isColFull };
+function isColEmpty(col) {
+  return gameState.board[4][col].color === null;
+}
+
+module.exports = { isColFull, isColEmpty };

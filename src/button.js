@@ -10,7 +10,7 @@ function createButtonId({ type, gameId, turnNumber, powerup, col }) {
       turnNumber,
       powerup,
     });
-  } else if (type === 'play') {
+  } else if (type === 'column') {
     return JSON.stringify({
       type,
       gameId,

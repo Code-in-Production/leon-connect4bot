@@ -22,6 +22,10 @@ function resetGame() {
   gameState.player1Id = '';
   gameState.player2Id = '';
   gameState.playerWaitingForReady = 0;
+  gameState.isBombActive = false;
+  gameState.powerupsActivated.bomb = false;
+  gameState.powerupsActivated.anvil = false;
+  gameState.powerupsActivated.spike = false;
 }
 
 module.exports = { resetGame };

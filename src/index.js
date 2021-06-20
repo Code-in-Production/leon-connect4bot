@@ -8,9 +8,9 @@ require('discord-buttons')(client);
 const { parseButtonId } = require('./button');
 const gameState = require('./state');
 const { resetGame } = require('./game/reset');
-const { Piece, playPiece } = require('./piece');
+const { Piece, playPiece, detonateBomb } = require('./piece');
 const { sendBoardMessageAndActions } = require('./board/message');
-const { getTurnMessage } = require('./player');
+const { getTurnMessage } = require('./board/message');
 
 client.on('ready', () => {
   console.log('Bot is ready.');
@@ -114,12 +114,19 @@ client.on('clickButton', async (button) => {
   }
 
   // If the button is a column play button, then play the piece
-  else if (type === 'play') {
-    playPiece({
-      channel: button.channel,
-      col,
-      piece: Piece({ color: gameState.curColor }),
-    });
+  else if (type === 'column') {
+    if (gameState.isBombActive) {
+      detonateBomb({
+        channel: button.channel,
+        col,
+      });
+    } else {
+      playPiece({
+        channel: button.channel,
+        col,
+        piece: Piece({ color: gameState.curColor }),
+      });
+    }
   }
 
   button.defer();

@@ -1,3 +1,5 @@
+const capitalize = require('lodash.capitalize');
+const outdent = require('outdent');
 const gameState = require('../state');
 const { getBoardActionComponents } = require('./components');
 
@@ -43,14 +45,24 @@ function getBoardMessage(params = {}) {
   return msg;
 }
 
+function getTurnMessage() {
+  let msg = outdent`===================
+  **${capitalize(gameState.curColor)}'s Turn:**\n`;
+
+  msg += getBoardMessage();
+
+  return msg;
+}
+
 function sendBoardMessageAndActions(channel) {
   channel.send(
-    `${getBoardMessage()}To play a piece, press the corresponding column number:`,
+    `${getTurnMessage()}To play a piece, press the corresponding column number:`,
     { components: getBoardActionComponents() }
   );
 }
 
 module.exports = {
   getBoardMessage,
+  getTurnMessage,
   sendBoardMessageAndActions,
 };

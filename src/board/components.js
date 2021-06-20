@@ -3,8 +3,16 @@ const { createButtonId } = require('../button');
 const { isColFull } = require('../utils');
 const gameState = require('../state');
 
-function getBoardActionComponents() {
-  function createPlayColButtonRow(emojis) {
+function defaultIsColDisabled(col) {
+  if (gameState.powerupsActivated.anvil) return false;
+
+  return isColFull(col);
+}
+
+function getBoardColumnButtons(params = {}) {
+  const isColDisabled = params.isColDisabled ?? defaultIsColDisabled;
+
+  function createColumnButtonsRow(emojis) {
     const buttonRow = new MessageActionRow();
     buttonRow.addComponents(
       emojis.map(({ emoji, col }) => {
@@ -13,14 +21,16 @@ function getBoardActionComponents() {
           .setStyle('blurple')
           .setID(
             createButtonId({
-              type: 'play',
+              type: 'column',
               gameId: gameState.gameId,
               turnNumber: gameState.turnNumber,
               col,
             })
           );
 
-        if (isColFull(col)) messageButton.setDisabled();
+        if (isColDisabled(col)) {
+          messageButton.setDisabled();
+        }
 
         return messageButton;
       })
@@ -28,17 +38,23 @@ function getBoardActionComponents() {
     return buttonRow;
   }
 
-  const playColRow1 = createPlayColButtonRow([
+  const columnButtonsRow1 = createColumnButtonsRow([
     { emoji: '1️⃣', col: 0 },
     { emoji: '2️⃣', col: 1 },
     { emoji: '3️⃣', col: 2 },
     { emoji: '4️⃣', col: 3 },
   ]);
-  const playColRow2 = createPlayColButtonRow([
+  const columnButtonsRow2 = createColumnButtonsRow([
     { emoji: '5️⃣', col: 4 },
     { emoji: '6️⃣', col: 5 },
     { emoji: '7️⃣', col: 6 },
   ]);
+
+  return [columnButtonsRow1, columnButtonsRow2];
+}
+
+function getBoardActionComponents() {
+  const columnButtonsRows = getBoardColumnButtons();
 
   const powerupRow = new MessageActionRow().addComponents([
     new MessageButton()
@@ -79,7 +95,7 @@ function getBoardActionComponents() {
       ),
   ]);
 
-  return [playColRow1, playColRow2, powerupRow];
+  return [...columnButtonsRows, powerupRow];
 }
 
-module.exports = { getBoardActionComponents };
+module.exports = { getBoardActionComponents, getBoardColumnButtons };
