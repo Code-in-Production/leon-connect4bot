@@ -49,7 +49,7 @@ client.on('message', (msg) => {
       gameState.playerId.red = msg.author.id;
       gameState.playerWaitingForReady = 'yellow';
       msg.channel.send(
-        `${yellowEmoji} Yellow player, please type in \`!ready\``
+        `${yellowEmoji} Yellow player, please type in \`!ready\`.`
       );
     } else if (gameState.playerWaitingForReady === 'yellow') {
       gameState.playerId.yellow = msg.author.id;
@@ -58,14 +58,14 @@ client.on('message', (msg) => {
       sendBoardMessageAndActions(msg.channel);
     } else {
       msg.channel.send(
-        'A game has not been started. To start a new game, type `!new`'
+        'A game has not been started. To start a new game, type `!new`.'
       );
     }
   } else if (command === 'new') {
     resetGame();
     gameState.playerWaitingForReady = 'red';
     msg.channel.send(
-      `Starting a new game...\n${redEmoji} Red player, please type in \`!ready\``
+      `Starting a new game...\n${redEmoji} Red player, please type in \`!ready\`.`
     );
   } else if (command === 'board') {
     if (!checkGameStarted(msg.channel)) return;
