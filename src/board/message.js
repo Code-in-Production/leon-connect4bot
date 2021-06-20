@@ -2,14 +2,15 @@ const capitalize = require('lodash.capitalize');
 const outdent = require('outdent');
 const gameState = require('../state');
 const { getBoardActionComponents } = require('./components');
-
-const blankEmoji = ':white_large_square:';
-const redEmoji = ':red_circle:';
-const yellowEmoji = ':yellow_circle:';
-const redSquareEmoji = ':red_square:';
-const yellowSquareEmoji = ':yellow_square:';
-const blackSquareEmoji = ':black_large_square:';
-const cactusEmoji = ':cactus:';
+const {
+  cactusEmoji,
+  blackSquareEmoji,
+  yellowSquareEmoji,
+  yellowEmoji,
+  redSquareEmoji,
+  redEmoji,
+  blankEmoji,
+} = require('../emojis');
 
 function getBoardMessage(params = {}) {
   let msg = ':one::two::three::four::five::six::seven:\n';
