@@ -1,3 +1,4 @@
 const turnUtils = require('./turn');
+const inventoryUtils = require('./inventory');
 
-module.exports = { ...turnUtils };
+module.exports = { ...turnUtils, ...inventoryUtils };

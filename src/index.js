@@ -13,6 +13,8 @@ const { sendBoardMessageAndActions } = require('./board/message');
 const { getTurnMessage } = require('./board/message');
 const { getBoardColumnButtons } = require('./board/components');
 const { isColFull } = require('./utils');
+const { outdent } = require('outdent');
+const { getInventoryMessage } = require('./player');
 
 client.on('ready', () => {
   console.log('Bot is ready.');
@@ -24,6 +26,13 @@ function debugBoard() {
       console.log(gameState.board[row][col]);
     }
   }
+}
+
+function checkGameStarted(channel) {
+  if (!gameState.gameStarted) {
+    channel.send('No game active. Please start a new game with !new');
+  }
+  return gameState.gameStarted;
 }
 
 client.on('message', (msg) => {
@@ -39,11 +48,11 @@ client.on('message', (msg) => {
     }
 
     if (gameState.playerWaitingForReady === 'red') {
-      gameState.redPlayerId = msg.author.id;
+      gameState.playerId.red = msg.author.id;
       gameState.playerWaitingForReady = 'yellow';
       msg.channel.send('Yellow player, please type in !ready');
     } else if (gameState.playerWaitingForReady === 'yellow') {
-      gameState.yellowPlayerId = msg.author.id;
+      gameState.playerId.yellow = msg.author.id;
       msg.channel.send('Starting new game...');
       resetGame();
       sendBoardMessageAndActions(msg.channel);
@@ -52,26 +61,36 @@ client.on('message', (msg) => {
         'A game has not been started. To start a new game, type !new'
       );
     }
-    return;
-  }
-
-  if (command === 'new') {
+  } else if (command === 'new') {
     gameState.playerWaitingForReady = 'red';
     msg.channel.send(
       'Starting a new game...\nRed player, please type in !ready'
     );
-  } else {
-    if (!gameState.gameStarted) {
-      return msg.channel.send(
-        'No game active. Please start a new game with !new'
-      );
-    }
+  } else if (command === 'board') {
+    if (!checkGameStarted(msg.channel)) return;
 
-    if (command === 'board') {
-      msg.channel.send(getTurnMessage());
+    msg.channel.send(getTurnMessage());
+  } else if (command === 'inventory') {
+    if (!checkGameStarted(msg.channel)) return;
+
+    // Check if the player is the red player or the yellow player
+    if (msg.author.id === gameState.playerId.red) {
+      msg.channel.send(getInventoryMessage({ color: 'red' }));
+    } else if (msg.author.id === gameState.playerId.yellow) {
+      msg.channel.send(getInventoryMessage({ color: 'red' }));
     } else {
-      msg.channel.send(`Unrecognized command: ${command}`);
+      msg.channel.send('You are not a player in the current game!');
     }
+  } else if (command === 'help') {
+    const helpMessage = outdent`
+      This is the help message.
+    `;
+
+    msg.channel.send(helpMessage);
+  } else {
+    msg.channel.send(
+      `Unrecognized command: ${command}. Please use !help to get a list of commands.`
+    );
   }
 });
 
@@ -89,7 +108,13 @@ client.on('clickButton', async (button) => {
     buttonGameId !== gameState.gameId ||
     buttonTurnNumber !== gameState.turnNumber
   ) {
-    return button.defer();
+    return button.reply.send(
+      'This button is for a previous turn; nothing happened.'
+    );
+  }
+
+  if (button.clicker.member.id !== gameState.playerId[gameState.curColor]) {
+    return button.reply.send('It is not your turn!');
   }
 
   // If the button is a powerup button (i.e. to activate a powerup), then

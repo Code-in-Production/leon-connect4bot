@@ -27,8 +27,8 @@ function resetGame() {
   gameState.curColor = 'red';
   gameState.turn = 0;
   // Red goes first
-  gameState.redPlayerId = '';
-  gameState.yellowPlayerId = '';
+  gameState.playerId.red = '';
+  gameState.playerId.yellow = '';
   gameState.playerWaitingForReady = '';
   gameState.isBombDetonationActive = false;
   gameState.powerupsActivated.bomb = false;

@@ -10,8 +10,10 @@ const gameState = {
     spike: false,
     bomb: false,
   },
-  yellowPlayerId: '',
-  redPlayerId: '',
+  playerId: {
+    red: '',
+    yellow: '',
+  },
   playerWaitingForReady: 0,
   isBombDetonationActive: false,
   inventories: {
