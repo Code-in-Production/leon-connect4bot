@@ -1,4 +1,4 @@
-const { getBoardMessage } = require('../board');
+const { sendBoardMessageAndActions } = require('../board/message');
 const gameState = require('../state');
 
 function endTurn(channel) {
@@ -7,8 +7,9 @@ function endTurn(channel) {
   } else {
     gameState.curColor = 'yellow';
   }
+  gameState.turnNumber += 1;
 
-	channel.send(getBoardMessage())
+  sendBoardMessageAndActions(channel);
 }
 
 module.exports = { endTurn };
