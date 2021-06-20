@@ -1,7 +1,7 @@
+const capitalize = require('lodash.capitalize');
 const { resetGame } = require('../game/reset');
 const gameState = require('../state');
 const { getBoardMessage } = require('./message');
-const capitalize = require('lodash.capitalize');
 
 function isRed({ col, row }) {
   return gameState.board[row][col].color === 'red';

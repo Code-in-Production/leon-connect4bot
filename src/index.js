@@ -86,7 +86,7 @@ client.on('message', (msg) => {
     } else {
       msg.channel.send('You are not a player in the current game!');
     }
-  } else if (command === 'help') {
+  } else if (command.startsWith('help')) {
     const subcommand = command.split(' ')[1];
     if (subcommand === undefined) {
       msg.channel.send(helpMessage);
