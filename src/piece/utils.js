@@ -26,14 +26,27 @@ function resetPowerups() {
   gameState.powerupsActivated.bomb = false;
 }
 
-function playPiece({ col, piece, channel }) {
-  const { color } = piece;
+function playPiece({ col, channel }) {
+  const color = gameState.curColor;
+
+  // Removing piece from inventory
+  if (gameState.powerupsActivated.bomb) {
+    gameState.inventories[color].bomb -= 1;
+  } else if (gameState.powerupsActivated.spike) {
+    gameState.inventories[color].spike -= 1;
+  } else if (gameState.powerupsActivated.anvil) {
+    gameState.inventories[color].anvil -= 1;
+  } else {
+    gameState.inventories[color].regular -= 1;
+  }
+
   // If the user plays a piece on a spike, remove the spike and discard the piece
   if (gameState.spikes[col]) {
     gameState.spikes[col] = false;
     channel.send(
       `${capitalize(gameState.curColor)}'s piece was destroyed by the spike.`
     );
+
     resetPowerups();
     endTurn(channel);
     return;
@@ -52,9 +65,13 @@ function playPiece({ col, piece, channel }) {
     if (!checkWin(channel)) {
       channel.send(
         'Please select a column to detonate (which will remove the bottom piece of the column and cause the other pieces in the column to fall down a row).',
-        // Can't detonate an empty row
         {
-          components: [getBoardColumnButtons((column) => isColEmpty(column))],
+          components: [
+            getBoardColumnButtons({
+              // Can't detonate an empty column
+              isColDisabled: (column) => isColEmpty(column),
+            }),
+          ],
         }
       );
       gameState.isBombDetonationActive = true;

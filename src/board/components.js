@@ -1,17 +1,9 @@
 const { MessageButton, MessageActionRow } = require('discord-buttons');
 const { createButtonId } = require('../button');
-const { isColFull, isBoardFull } = require('../utils');
+const { isBoardFull, isColFull } = require('../utils');
 const gameState = require('../state');
 
-function defaultIsColDisabled(col) {
-  if (gameState.powerupsActivated.anvil) return false;
-
-  return isColFull(col);
-}
-
-function getBoardColumnButtons(params = {}) {
-  const isColDisabled = params.isColDisabled ?? defaultIsColDisabled;
-
+function getBoardColumnButtons({ isColDisabled }) {
   function createColumnButtonsRow(emojis) {
     const buttonRow = new MessageActionRow();
     buttonRow.addComponents(
@@ -127,7 +119,13 @@ function getPowerupActionButtons() {
 }
 
 function getBoardActionComponents() {
-  const columnButtonsRows = getBoardColumnButtons();
+  const columnButtonsRows = getBoardColumnButtons({
+    isColDisabled: (col) => {
+      if (gameState.inventories[gameState.curColor].regular <= 0) return true;
+
+      return isColFull(col);
+    },
+  });
   const powerupRow = getPowerupActionButtons();
 
   return [...columnButtonsRows, powerupRow];
