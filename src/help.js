@@ -1,7 +1,7 @@
 const outdent = require('outdent');
 
 const helpMessage = outdent`
-	==========
+	======== Help ========
 	Hi, I'm the Power Connect-4 Bot!
 
 	__How to play:__
@@ -14,8 +14,8 @@ const helpMessage = outdent`
 
 	**Note:** All pieces except for the anvil can only be placed in a non-empty column.
 
+	__Commands:__
 	\`\`\`
-	Commands:
 	!help - Displays this message.
 		!help board - Displays a help message for the board. 
 		!help inventory - Displays a help message for the inventory. 
@@ -24,21 +24,22 @@ const helpMessage = outdent`
 	!board - Displays the current board state.
 	!inventory - Displays your inventory.
 	\`\`\`
+	======== End of Help ========
 `;
 
 const inventoryHelpMessage = outdent`
-	\`\`\`
+	======== Inventory Help ========
 	Your inventory contains the remaining pieces you have.
 
-	Regular Pieces - The amount of regular pieces (i.e. non-special pieces) you have remaining.
-	Anvil Pieces - The amount of anvil pieces you have remaining.
-	Spike Pieces - The amount of spike pieces you have remaining.
-	Bomb Pieces - The amount of bomb pieces you have remaining.
-	\`\`\`
+	**Regular Pieces** - The amount of regular pieces (i.e. non-special pieces) you have remaining.
+	**Anvil Pieces** - The amount of anvil pieces you have remaining.
+	**Spike Pieces** - The amount of spike pieces you have remaining.
+	**Bomb Pieces** - The amount of bomb pieces you have remaining.
+	======== End of Inventory Help ========
 `;
 
 const boardHelpMessage = outdent`
-	\`\`\`
+	======== Board Help =======
 	The board consists of blank squares, red pieces, and yellow pieces. 
 	
 	The black squares represent the bottom of the board, and if a spike piece is active on a column, the black square for that column turns into a cactus until the spike is removed when a piece hits it.
@@ -46,7 +47,7 @@ const boardHelpMessage = outdent`
 	The blank squares are like air; any piece can fall through them.
 
 	The board also has a series of numbers above it representing the column number. To drop a piece in a specific column, you press the button with the same column number as the column you wish the drop the piece into.
-	\`\`\`
+	======== End of Board Help ========
 `;
 
 module.exports = {

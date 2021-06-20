@@ -19,6 +19,7 @@ const {
   inventoryHelpMessage,
   boardHelpMessage,
 } = require('./help');
+const { redEmoji, yellowEmoji } = require('./emojis');
 
 client.on('ready', () => {
   console.info('Bot is ready.');
@@ -47,7 +48,9 @@ client.on('message', (msg) => {
     if (gameState.playerWaitingForReady === 'red') {
       gameState.playerId.red = msg.author.id;
       gameState.playerWaitingForReady = 'yellow';
-      msg.channel.send('Yellow player, please type in `!ready`');
+      msg.channel.send(
+        `${yellowEmoji}Yellow player, please type in \`!ready\``
+      );
     } else if (gameState.playerWaitingForReady === 'yellow') {
       gameState.playerId.yellow = msg.author.id;
       gameState.gameStarted = true;
@@ -62,7 +65,7 @@ client.on('message', (msg) => {
     resetGame();
     gameState.playerWaitingForReady = 'red';
     msg.channel.send(
-      'Starting a new game...\nRed player, please type in `!ready`'
+      `Starting a new game...\n${redEmoji}Red player, please type in \`!ready\``
     );
   } else if (command === 'board') {
     if (!checkGameStarted(msg.channel)) return;
