@@ -28,6 +28,7 @@ const gameState = {
       bomb: 1,
     },
   },
+  lastMessage: '',
 };
 
 module.exports = gameState;

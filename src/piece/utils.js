@@ -44,11 +44,9 @@ async function playPiece({ col, channel }) {
   // If the user plays a piece on a spike, remove the spike and discard the piece
   if (gameState.spikes[col]) {
     gameState.spikes[col] = false;
-    channel.send(
-      `${capitalize(gameState.curColor)}'s piece was destroyed by the spike.`
-    );
-    await delay(1000);
-
+    gameState.lastMessage = `${capitalize(
+      gameState.curColor
+    )}'s piece was destroyed by the spike.`;
     resetPowerups();
     endTurn(channel);
     return;
@@ -65,12 +63,9 @@ async function playPiece({ col, channel }) {
   } else if (gameState.powerupsActivated.bomb) {
     dropPiece({ color, col });
     if (!checkWin(channel)) {
-      channel.send(
-        `${capitalize(gameState.curColor)} dropped a bomb piece on column ${
-          col + 1
-        }.`
-      );
-      await delay(1000);
+      gameState.lastMessage = `${capitalize(
+        gameState.curColor
+      )} dropped a bomb piece on column ${col + 1}.`;
       channel.send(
         `Please select a column to detonate (which will remove the bottom piece of the column and cause the other pieces in the column to fall down a row).`,
         {
@@ -84,21 +79,17 @@ async function playPiece({ col, channel }) {
     }
   } else if (gameState.powerupsActivated.spike) {
     dropPiece({ color, col });
-    channel.send(
-      `${capitalize(gameState.curColor)} dropped a spike piece on column ${
-        col + 1
-      }.`
-    );
+    gameState.lastMessage = `${capitalize(
+      gameState.curColor
+    )} dropped a bomb piece on column ${col + 1}.`;
     gameState.spikes[col] = true;
     await delay(1000);
     if (!checkWin(channel)) endTurn(channel);
   } else {
     dropPiece({ color, col });
-    channel.send(
-      `${capitalize(gameState.curColor)} dropped a regular piece on column ${
-        col + 1
-      }.`
-    );
+    gameState.lastMessage = `${capitalize(
+      gameState.curColor
+    )} dropped a bomb piece on column ${col + 1}.`;
     await delay(1000);
     if (!checkWin(channel)) endTurn(channel);
   }
@@ -114,10 +105,9 @@ async function detonateBomb({ col, channel }) {
   // Make the top piece empty
   gameState.board[0][col] = Piece();
 
-  channel.send(
-    `${capitalize(gameState.curColor)} has detonated a bomb on column ${col}.`
-  );
-  await delay(1000);
+  gameState.lastMessage = `${capitalize(
+    gameState.curColor
+  )} has detonated a bomb on column ${col + 1}.`;
 
   if (!checkWin(channel)) {
     endTurn(channel);

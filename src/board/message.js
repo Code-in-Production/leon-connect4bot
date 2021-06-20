@@ -61,6 +61,8 @@ function getBoardMessage(params = {}) {
 function getTurnMessage() {
   let msg = outdent`
   ===================
+  ${gameState.lastMessage}
+
   **${capitalize(gameState.curColor)}'s Turn:**`;
 
   msg += `\n${getBoardMessage()}`;
