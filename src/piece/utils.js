@@ -59,7 +59,12 @@ async function playPiece({ col, channel }) {
 
     // Adding the piece to the last row
     gameState.board[4][col] = Piece({ color });
-    endTurn(channel);
+    gameState.lastMessage = `${capitalize(
+      gameState.curColor
+    )} has dropped an anvil piece on column ${col + 1}.`;
+    if (!checkWin(channel)) {
+      endTurn(channel);
+    }
   } else if (gameState.powerupsActivated.bomb) {
     // Moving all pieces one spot down
     for (let row = 4; row > 0; row -= 1) {

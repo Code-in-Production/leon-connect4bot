@@ -12,7 +12,7 @@ const blackSquareEmoji = ':black_large_square:';
 const cactusEmoji = ':cactus:';
 
 function getBoardMessage(params = {}) {
-  let msg = '';
+  let msg = ':one::two::three::four::five::six::seven:\n';
 
   function isWinningSquare({ col, row }) {
     if (params.winningSquares === undefined) return false;
@@ -67,7 +67,7 @@ function getTurnMessage() {
     gameState.curColor
   )}'s Turn:**`;
 
-  msg += `\n${getBoardMessage()}`;
+  msg += `\n\n${getBoardMessage()}`;
 
   return msg;
 }
