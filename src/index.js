@@ -23,7 +23,7 @@ client.on('ready', () => {
 
 function checkGameStarted(channel) {
   if (!gameState.gameStarted) {
-    channel.send('No game active. Please start a new game with !new');
+    channel.send('No game active. Please start a new game with `!new`');
   }
   return gameState.gameStarted;
 }
