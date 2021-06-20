@@ -1,4 +1,3 @@
-const capitalize = require('lodash.capitalize');
 const gameState = require('../state');
 const { getBoardActionComponents } = require('./components');
 
@@ -9,16 +8,15 @@ const redSquareEmoji = ':red_square:';
 const yellowSquareEmoji = ':yellow_square:';
 
 function getBoardMessage(params = {}) {
+  let msg = '';
+
   function isWinningSquare({ col, row }) {
     if (params.winningSquares === undefined) return false;
 
-    return params.winningSquares.any(
+    return params.winningSquares.some(
       (square) => square.col === col && square.row === row
     );
   }
-
-  let msg = `===================
-  **${capitalize(gameState.curColor)}'s Turn:**\n`;
   for (let row = 0; row < 5; row += 1) {
     for (let col = 0; col < 7; col += 1) {
       const piece = gameState.board[row][col];
@@ -41,13 +39,18 @@ function getBoardMessage(params = {}) {
 
     msg += '\n';
   }
-  msg += 'To play a piece, press the corresponding column number:';
 
   return msg;
 }
 
 function sendBoardMessageAndActions(channel) {
-  channel.send(getBoardMessage(), { components: getBoardActionComponents() });
+  channel.send(
+    `${getBoardMessage()}To play a piece, press the corresponding column number:`,
+    { components: getBoardActionComponents() }
+  );
 }
 
-module.exports = { getBoardMessage, sendBoardMessageAndActions };
+module.exports = {
+  getBoardMessage,
+  sendBoardMessageAndActions,
+};

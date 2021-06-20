@@ -11,14 +11,24 @@ function isYellow({ col, row }) {
 }
 
 function announceWinner({ channel, winningSquares }) {
-  getBoardMessage({ winningSquares });
-  channel.send(`We have a winner; Congratulations to ${gameState.curColor}!`);
+  channel.send(
+    `${getBoardMessage({
+      winningSquares,
+    })}\n\nWe have a winner; Congratulations to ${
+      gameState.curColor
+    } for completing the first Connect 4!`
+  );
   resetGame();
 }
 
 function checkWin(channel) {
   let streak = 0;
   let streakColor = '';
+
+  function resetStreak() {
+    streakColor = '';
+    streak = 0;
+  }
 
   function updateStreak({ col, row }) {
     if (isRed({ col, row })) {
@@ -38,13 +48,8 @@ function checkWin(channel) {
     }
     // blank square
     else {
-      streak = 0;
+      resetStreak();
     }
-  }
-
-  function resetStreak() {
-    streakColor = '';
-    streak = 0;
   }
 
   // Check for horizontal connect 4s
@@ -102,11 +107,11 @@ function checkWin(channel) {
 
   let curRow;
   let curCol;
-  for (const { col, row } of upRightStartPositions) {
-    curRow = row;
-    curCol = col;
-    while (curRow < 7 && curCol >= 0) {
-      updateStreak({ col, row });
+  for (const startPos of upRightStartPositions) {
+    curRow = startPos.row;
+    curCol = startPos.col;
+    while (curRow < 5 && curCol >= 0) {
+      updateStreak({ col: curCol, row: curRow });
       if (streak >= 4) {
         announceWinner({
           channel,
@@ -137,11 +142,11 @@ function checkWin(channel) {
     { col: 3, row: 0 },
   ];
 
-  for (const { col, row } of downRightStartPositions) {
-    curRow = row;
-    curCol = col;
-    while (curRow < 7 && curCol < 5) {
-      updateStreak({ col, row });
+  for (const startPos of downRightStartPositions) {
+    curRow = startPos.row;
+    curCol = startPos.col;
+    while (curRow < 5 && curCol < 7) {
+      updateStreak({ col: curCol, row: curRow });
       if (streak >= 4) {
         announceWinner({
           channel,

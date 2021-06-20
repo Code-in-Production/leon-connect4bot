@@ -2,6 +2,7 @@ const { isColFull } = require('../utils');
 const Piece = require('./piece');
 const gameState = require('../state');
 const { endTurn } = require('../player');
+const { checkWin } = require('../board/win');
 
 function dropPiece({ col, color }) {
   if (isColFull(col)) {
@@ -29,13 +30,16 @@ function playPiece({ col, piece, channel }) {
     endTurn(channel);
   } else if (powerup === 'bomb') {
     dropPiece({ color, col });
+    if (!checkWin(channel)) {
+      // TODO: Query user for bomb
+    }
   } else if (powerup === 'spike') {
     dropPiece({ color, col });
     gameState.spikes[col] = true;
-    endTurn(channel);
+    if (!checkWin(channel)) endTurn(channel);
   } else {
     dropPiece({ color, col });
-    endTurn(channel);
+    if (!checkWin(channel)) endTurn(channel);
   }
 
   gameState.powerupsActivated.anvil = false;

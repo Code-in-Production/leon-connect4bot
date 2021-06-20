@@ -1,6 +1,6 @@
 const { nanoid } = require('nanoid');
 const gameState = require('../state');
-const { Piece } = require('../piece');
+const Piece = require('../piece/piece');
 
 function resetGame() {
   const newBoard = [];

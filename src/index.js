@@ -8,9 +8,9 @@ require('discord-buttons')(client);
 const { parseButtonId } = require('./button');
 const gameState = require('./state');
 const { resetGame } = require('./game/reset');
-const { getBoardMessage } = require('./board');
 const { Piece, playPiece } = require('./piece');
 const { sendBoardMessageAndActions } = require('./board/message');
+const { getTurnMessage } = require('./player');
 
 client.on('ready', () => {
   console.log('Bot is ready.');
@@ -82,7 +82,7 @@ client.on('message', (msg) => {
     }
 
     if (command === 'board') {
-      msg.channel.send(getBoardMessage());
+      msg.channel.send(getTurnMessage());
     } else {
       msg.channel.send(`Unrecognized command: ${command}`);
     }
