@@ -81,7 +81,7 @@ async function playPiece({ col, channel }) {
     dropPiece({ color, col });
     gameState.lastMessage = `${capitalize(
       gameState.curColor
-    )} dropped a bomb piece on column ${col + 1}.`;
+    )} dropped a spike piece on column ${col + 1}.`;
     gameState.spikes[col] = true;
     await delay(1000);
     if (!checkWin(channel)) endTurn(channel);
@@ -89,7 +89,7 @@ async function playPiece({ col, channel }) {
     dropPiece({ color, col });
     gameState.lastMessage = `${capitalize(
       gameState.curColor
-    )} dropped a bomb piece on column ${col + 1}.`;
+    )} dropped a regular piece on column ${col + 1}.`;
     await delay(1000);
     if (!checkWin(channel)) endTurn(channel);
   }

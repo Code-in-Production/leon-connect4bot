@@ -31,23 +31,11 @@ client.on('message', (msg) => {
   if (!msg.content.startsWith('!')) return;
   const command = msg.content.slice(1);
 
-  if (command === 'test') {
-    return;
-  }
-
-  if (command === 'debug') {
-    if (gameState.gameStarted) debugBoard();
-    return;
-  }
-
-  if (command === 'reset') {
-    resetGame();
-    return;
-  }
-
   if (command === 'ready') {
     if (gameState.gameStarted) {
-      return msg.channel.send('A game is already in progress.');
+      return msg.channel.send(
+        'A game is already in progress. To reset the game, use !reset.'
+      );
     }
 
     if (gameState.playerWaitingForReady === 'red') {
@@ -61,25 +49,21 @@ client.on('message', (msg) => {
       sendBoardMessageAndActions(msg.channel);
     } else {
       msg.channel.send(
-        'A game has not been started. To start a new game, type !play'
+        'A game has not been started. To start a new game, type !new'
       );
     }
     return;
   }
 
-  if (command === 'play') {
-    if (gameState.gameStarted) {
-      msg.channel.send('A game is in progress. To reset the game, use !reset');
-    } else {
-      gameState.playerWaitingForReady = 'red';
-      msg.channel.send(
-        'Starting a new game...\nRed player, please type in !ready'
-      );
-    }
+  if (command === 'new') {
+    gameState.playerWaitingForReady = 'red';
+    msg.channel.send(
+      'Starting a new game...\nRed player, please type in !ready'
+    );
   } else {
     if (!gameState.gameStarted) {
       return msg.channel.send(
-        'No game active. Please start a new game with !play'
+        'No game active. Please start a new game with !new'
       );
     }
 
