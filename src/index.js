@@ -70,7 +70,11 @@ client.on('message', (msg) => {
   } else if (command === 'board') {
     if (!checkGameStarted(msg.channel)) return;
 
-    msg.channel.send(getTurnMessage());
+    if (msg.author.id === gameState.playerId[gameState.curColor]) {
+      sendBoardMessageAndActions(msg.channel);
+    } else {
+      msg.channel.send(getTurnMessage());
+    }
   } else if (command === 'inventory') {
     if (!checkGameStarted(msg.channel)) return;
 
