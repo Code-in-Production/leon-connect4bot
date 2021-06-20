@@ -44,6 +44,10 @@ client.on('message', (msg) => {
   }
 
   if (command === 'ready') {
+    if (gameState.gameStarted) {
+      return msg.channel.send('A game is already in progress.');
+    }
+
     if (gameState.playerWaitingForReady === 1) {
       gameState.player1Id = msg.author.id;
       gameState.playerWaitingForReady = 2;
@@ -53,6 +57,10 @@ client.on('message', (msg) => {
       msg.channel.send('Starting new game...');
       resetGame();
       sendBoardMessageAndActions(msg.channel);
+    } else {
+      msg.channel.send(
+        'A game has not been started. To start a new game, type !play'
+      );
     }
     return;
   }

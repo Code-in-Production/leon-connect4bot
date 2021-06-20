@@ -12,7 +12,7 @@ const gameState = {
   },
   player1Id: '',
   player2Id: '',
-  playerWaitingForReady: 1,
+  playerWaitingForReady: 0,
 };
 
 module.exports = gameState;
