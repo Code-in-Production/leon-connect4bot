@@ -14,6 +14,7 @@ const { getTurnMessage } = require('./board/message');
 const { getBoardColumnButtons } = require('./board/components');
 const { isColFull } = require('./utils');
 const { getInventoryMessage } = require('./player');
+const { helpMessage, inventoryHelpMessage } = require('./help');
 
 client.on('ready', () => {
   console.info('Bot is ready.');
@@ -74,8 +75,16 @@ client.on('message', (msg) => {
       msg.channel.send('You are not a player in the current game!');
     }
   } else if (command === 'help') {
-
-    msg.channel.send(helpMessage);
+    const subcommand = command.split(' ')[1];
+    if (subcommand === undefined) {
+      msg.channel.send(helpMessage);
+    } else if (subcommand === 'inventory') {
+      msg.channel.send(inventoryHelpMessage);
+    } else {
+      msg.channel.send(
+        `Unrecognized command: \`!${command}\`. Please use \`!help\` to get a list of commands.`
+      );
+    }
   } else {
     msg.channel.send(
       `Unrecognized command: \`!${command}\`. Please use \`!help\` to get a list of commands.`
