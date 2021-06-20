@@ -65,13 +65,13 @@ async function playPiece({ col, channel }) {
       endTurn(channel);
     }
   } else if (gameState.powerupsActivated.bomb) {
-    dropPiece({ color, col });
     // Moving all pieces one spot down
     for (let row = 4; row > 0; row -= 1) {
       gameState.board[row][col] = gameState.board[row - 1][col];
     }
     // Make the top piece empty
     gameState.board[0][col] = Piece();
+    dropPiece({ color, col });
     gameState.lastMessage = `${capitalize(
       gameState.curColor
     )} has dropped a bomb piece on column ${col + 1}.`;
