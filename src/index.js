@@ -49,12 +49,12 @@ client.on('message', (msg) => {
       return msg.channel.send('A game is already in progress.');
     }
 
-    if (gameState.playerWaitingForReady === 1) {
-      gameState.player1Id = msg.author.id;
-      gameState.playerWaitingForReady = 2;
-      msg.channel.send('Player 2, please type in !ready');
-    } else if (gameState.playerWaitingForReady === 2) {
-      gameState.player2Id = msg.author.id;
+    if (gameState.playerWaitingForReady === 'red') {
+      gameState.redPlayerId = msg.author.id;
+      gameState.playerWaitingForReady = 'yellow';
+      msg.channel.send('Yellow player, please type in !ready');
+    } else if (gameState.playerWaitingForReady === 'yellow') {
+      gameState.yellowPlayerId = msg.author.id;
       msg.channel.send('Starting new game...');
       resetGame();
       sendBoardMessageAndActions(msg.channel);
@@ -70,9 +70,9 @@ client.on('message', (msg) => {
     if (gameState.gameStarted) {
       msg.channel.send('A game is in progress. To reset the game, use !reset');
     } else {
-      gameState.playerWaitingForReady = 1;
+      gameState.playerWaitingForReady = 'red';
       msg.channel.send(
-        'Starting a new game...\nPlayer 1, please type in !ready'
+        'Starting a new game...\nRed player, please type in !ready'
       );
     }
   } else {

@@ -8,4 +8,8 @@ function isColEmpty(col) {
   return gameState.board[4][col].color === null;
 }
 
-module.exports = { isColFull, isColEmpty };
+function isBoardFull() {
+  return [...Array(7).keys()].every((col) => isColFull(col));
+}
+
+module.exports = { isColFull, isColEmpty, isBoardFull };

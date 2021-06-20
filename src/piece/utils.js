@@ -31,7 +31,11 @@ function playPiece({ col, piece, channel }) {
   // If the user plays a piece on a spike, remove the spike and discard the piece
   if (gameState.spikes[col]) {
     gameState.spikes[col] = false;
+    channel.send(
+      `${capitalize(gameState.curColor)}'s piece was destroyed by the spike.`
+    );
     resetPowerups();
+    endTurn(channel);
     return;
   }
 

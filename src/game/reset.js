@@ -17,11 +17,12 @@ function resetGame() {
   gameState.gameId = nanoid();
   gameState.gameStarted = true;
   gameState.spikes = [false, false, false, false, false, false, false];
-  gameState.curColor = 'yellow';
+  gameState.curColor = 'red';
   gameState.turn = 0;
-  gameState.player1Id = '';
-  gameState.player2Id = '';
-  gameState.playerWaitingForReady = 0;
+  // Red goes first
+  gameState.redPlayerId = '';
+  gameState.yellowPlayerId = '';
+  gameState.playerWaitingForReady = '';
   gameState.isBombDetonationActive = false;
   gameState.powerupsActivated.bomb = false;
   gameState.powerupsActivated.anvil = false;

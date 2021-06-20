@@ -10,10 +10,24 @@ const gameState = {
     spike: false,
     bomb: false,
   },
-  player1Id: '',
-  player2Id: '',
+  yellowPlayerId: '',
+  redPlayerId: '',
   playerWaitingForReady: 0,
   isBombDetonationActive: false,
+  inventories: {
+    red: {
+      regular: 16,
+      anvil: 1,
+      spike: 1,
+      bomb: 1,
+    },
+    yellow: {
+      regular: 16,
+      anvil: 1,
+      spike: 1,
+      bomb: 1,
+    },
+  },
 };
 
 module.exports = gameState;

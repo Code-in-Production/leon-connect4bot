@@ -8,6 +8,8 @@ const redEmoji = ':red_circle:';
 const yellowEmoji = ':yellow_circle:';
 const redSquareEmoji = ':red_square:';
 const yellowSquareEmoji = ':yellow_square:';
+const blackSquareEmoji = ':black_large_square:';
+const cactusEmoji = ':cactus:';
 
 function getBoardMessage(params = {}) {
   let msg = '';
@@ -41,6 +43,17 @@ function getBoardMessage(params = {}) {
 
     msg += '\n';
   }
+
+  // Adding the spikes
+  for (let col = 0; col < 7; col += 1) {
+    if (gameState.spikes[col]) {
+      msg += cactusEmoji;
+    } else {
+      msg += blackSquareEmoji;
+    }
+  }
+
+  msg += '\n';
 
   return msg;
 }

@@ -1,6 +1,6 @@
 const { MessageButton, MessageActionRow } = require('discord-buttons');
 const { createButtonId } = require('../button');
-const { isColFull } = require('../utils');
+const { isColFull, isBoardFull } = require('../utils');
 const gameState = require('../state');
 
 function defaultIsColDisabled(col) {
@@ -53,47 +53,82 @@ function getBoardColumnButtons(params = {}) {
   return [columnButtonsRow1, columnButtonsRow2];
 }
 
+function isAnvilPlayable() {
+  return gameState.inventories[gameState.curColor].anvil > 0;
+}
+
+// Spike is only playable when at least one col is not full
+function isSpikePlayable() {
+  return gameState.inventories[gameState.curColor].spike > 0 && !isBoardFull();
+}
+
+// Spike is only playable when at least one col is not full
+function isBombPlayable() {
+  return gameState.inventories[gameState.curColor].bomb > 0 && !isBoardFull();
+}
+
+function getPowerupActionButtons() {
+  const anvilButton = new MessageButton()
+    .setEmoji('🔨')
+    .setLabel('Anvil')
+    .setStyle('blurple')
+    .setID(
+      createButtonId({
+        type: 'powerup',
+        gameId: gameState.gameId,
+        turnNumber: gameState.turnNumber,
+        powerup: 'anvil',
+      })
+    );
+
+  if (!isAnvilPlayable()) {
+    anvilButton.setDisabled();
+  }
+
+  const spikeButton = new MessageButton()
+    .setEmoji('🌵')
+    .setLabel('Spike')
+    .setStyle('blurple')
+    .setID(
+      createButtonId({
+        type: 'powerup',
+        gameId: gameState.gameId,
+        turnNumber: gameState.turnNumber,
+        powerup: 'spike',
+      })
+    );
+
+  if (!isSpikePlayable()) {
+    spikeButton.setDisabled();
+  }
+
+  const bombButton = new MessageButton()
+    .setEmoji('💣')
+    .setLabel('Bomb')
+    .setStyle('blurple')
+    .setID(
+      createButtonId({
+        type: 'powerup',
+        gameId: gameState.gameId,
+        turnNumber: gameState.turnNumber,
+        powerup: 'bomb',
+      })
+    );
+
+  if (!isBombPlayable()) {
+    bombButton.setDisabled();
+  }
+
+  return new MessageActionRow().addComponents([
+    anvilButton,
+    spikeButton,
+    bombButton,
+  ]);
+}
+
 function getBoardActionComponents() {
   const columnButtonsRows = getBoardColumnButtons();
-
-  const powerupRow = new MessageActionRow().addComponents([
-    new MessageButton()
-      .setEmoji('🔨')
-      .setLabel('Anvil')
-      .setStyle('blurple')
-      .setID(
-        createButtonId({
-          type: 'powerup',
-          gameId: gameState.gameId,
-          turnNumber: gameState.turnNumber,
-          powerup: 'anvil',
-        })
-      ),
-    new MessageButton()
-      .setEmoji('🌵')
-      .setLabel('Spike')
-      .setStyle('blurple')
-      .setID(
-        createButtonId({
-          type: 'powerup',
-          gameId: gameState.gameId,
-          turnNumber: gameState.turnNumber,
-          powerup: 'spike',
-        })
-      ),
-    new MessageButton()
-      .setEmoji('💣')
-      .setLabel('Bomb')
-      .setStyle('blurple')
-      .setID(
-        createButtonId({
-          type: 'powerup',
-          gameId: gameState.gameId,
-          turnNumber: gameState.turnNumber,
-          powerup: 'bomb',
-        })
-      ),
-  ]);
+  const powerupRow = getPowerupActionButtons();
 
   return [...columnButtonsRows, powerupRow];
 }
